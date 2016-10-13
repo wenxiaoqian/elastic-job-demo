@@ -19,15 +19,21 @@
     <reg:zookeeper id="regCenter" server-lists="localhost:2181" namespace="welab-job"
                    base-sleep-time-milliseconds="1000" max-sleep-time-milliseconds="3000" max-retries="3" />
 
-    <!-- 配置作业A-->
-    <job:simple id="oneOffElasticJob" class="com.welab.job.MyElasticJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
-                sharding-total-count="3" sharding-item-parameters="0=A,1=B,2=C" >
+    <!-- 配置作业1-->
+    <job:simple id="oneOffElasticJob" class="com.welab.job.simple.MyElasticJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
+                sharding-total-count="3" sharding-item-parameters="0=A,1=B,2=C,3=H" description="作业1" overwrite="true" >
         <job:listener class="com.welab.job.listener.SimpleListener"/>
     </job:simple>
 
-    <!-- 配置作业B
-    <job:bean id="perpetualElasticJob" class="xxx.MyPerpetualElasticJob" regCenter="regCenter" cron="0/10 * * * * ?"
-              shardingTotalCount="3" shardingItemParameters="0=A,1=B,2=C"
-              processCountIntervalSeconds="10" concurrentDataProcessThreadCount="10" />-->
+    <!-- 配置作业2-->
+    <job:simple id="oneOffElasticJob2" class="com.welab.job.simple.MyElasticJob2" registry-center-ref="regCenter" cron="0/20 * * * * ?"
+                sharding-total-count="3" sharding-item-parameters="0=D,1=E,2=F" description="作业2" overwrite="true" >
+        <job:listener class="com.welab.job.listener.SimpleListener"/>
+    </job:simple>
+
+    <job:dataflow id="dataflowJob" class="com.welab.job.dataflow.MyDataflowJob" registry-center-ref="regCenter" cron="0 0/1 * * * ?"
+                  sharding-total-count="3" sharding-item-parameters="0=aa,1=bb,2=cc" description="dataflow" overwrite="true" streaming-process="true">
+        <job:listener class="com.welab.job.listener.SimpleListener"/>
+    </job:dataflow>
 
 </beans>
